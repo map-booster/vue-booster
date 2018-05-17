@@ -4,7 +4,7 @@ openshift_cluster_content:
   - object: app-builds
     content:
       - name: assistant-build
-        template: "https://raw.githubusercontent.com/rht-labs/labs-ci-cd/v3.7.5/openshift-templates/s2i-app-build/template-with-secrets.yaml"
+        template: "https://raw.githubusercontent.com/rht-labs/labs-ci-cd/v3.9.0/openshift-templates/s2i-app-build/template-with-secrets.yaml"
         params: "{{ playbook_dir }}/params/build"
         namespace: "{{ ci_cd_namespace }}"
         tags:
