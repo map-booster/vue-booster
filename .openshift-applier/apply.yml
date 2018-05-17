@@ -1,0 +1,10 @@
+---
+- name: Run OpenShift Applier
+  hosts: local
+  gather_facts: no
+  vars:
+    ci_cd_namespace: bcbs-nc-ci-cd
+    dev_namespace: bcbs-nc-dev
+    test_namespace: bcbs-nc-test
+  roles:
+    - openshift-applier/roles/openshift-applier

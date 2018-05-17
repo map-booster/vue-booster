@@ -1,0 +1,5 @@
+PIPELINE_SOURCE_REPOSITORY_URL=https://git.apps.bcbsnc.rht-labs.com/bcbsnc/vue-orchestration.git
+PIPELINE_SOURCE_REPOSITORY_REF=master
+NAME=vue-orchestration
+S2I_BASE_IMAGE=nodejs:8
+PIPELINE_SOURCE_SECRET=gitlab

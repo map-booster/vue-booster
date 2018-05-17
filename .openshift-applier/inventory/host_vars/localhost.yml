@@ -1,0 +1,27 @@
+---
+connection: local
+openshift_cluster_content:
+  - object: app-builds
+    content:
+      - name: assistant-build
+        template: "https://raw.githubusercontent.com/rht-labs/labs-ci-cd/v3.7.5/openshift-templates/s2i-app-build/template-with-secrets.yaml"
+        params: "{{ playbook_dir }}/params/build"
+        namespace: "{{ ci_cd_namespace }}"
+        tags:
+          - build
+  - object: dev-stage
+    content:
+      - name: assistant-deploy
+        template: "{{ playbook_dir }}/templates/orchestration-node-deploy.yaml"
+        params: "{{ playbook_dir }}/params/dev"
+        namespace: "{{ dev_namespace }}"
+        tags:
+          - dev
+  - object: test-stage
+    content:
+      - name: assistant-deploy
+        template: "{{ playbook_dir }}/templates/orchestration-node-deploy.yaml"
+        params: "{{ playbook_dir }}/params/test"
+        namespace: "{{ test_namespace }}"
+        tags:
+          - test
