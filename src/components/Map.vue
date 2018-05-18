@@ -33,7 +33,7 @@ export default {
         type: 'circle',
         source: {
           type: 'geojson',
-          data: 'https://api.gdeltproject.org/api/v2/geo/geo?query=theme:education&format=geojson&mode=PointHeatMap'
+          data: dataUrl
         },
         paint: {
           'circle-radius': {
