@@ -5,9 +5,9 @@
 
 <script>
 import mapboxgl from 'mapbox-gl';
+import constants from '../util/constants';
 
 mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_TOKEN;
-const dataUrl = process.env.VUE_APP_DATA_URL;
 
 export default {
   name: 'map-view',
@@ -32,7 +32,7 @@ export default {
         type: 'circle',
         source: {
           type: 'geojson',
-          data: dataUrl
+          data: constants.URL_EDUCATION
         },
         paint: {
           'circle-radius': {
