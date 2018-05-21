@@ -6,9 +6,8 @@
 <script>
 import mapboxgl from 'mapbox-gl';
 
-// TODO: Move these values to environment variables.
-mapboxgl.accessToken = 'pk.eyJ1IjoicmRlYmVhc2ktcmgiLCJhIjoiY2pnZm1raHVjMmx0OTMzbXFqcXE2ZzZmayJ9.kBwjWXYflZ0JJ3Cfsi5p1Q';
-const dataUrl = 'https://api.gdeltproject.org/api/v2/geo/geo?query=theme:education&format=geojson&mode=PointHeatMap';
+mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_TOKEN;
+const dataUrl = process.env.VUE_APP_DATA_URL;
 
 export default {
   name: 'Map',
