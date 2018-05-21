@@ -1,6 +1,6 @@
 <template>
   <sui-sidebar-pushable>
-    <side-menu v-bind:visible="sidebarVisible" />
+    <side-menu v-bind:visible="sidebarVisible" v-on:close="toggleSidebar" />
     <sui-button v-on:click="toggleSidebar" class="sidebarToggle simpleBtn">
       <sui-icon name="sidebar" size="big" />
     </sui-button>

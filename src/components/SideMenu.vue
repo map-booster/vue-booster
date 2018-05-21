@@ -1,6 +1,6 @@
 <template>
   <sui-sidebar as="Menu" animation='overlay' width='wide' v-bind:visible="visible" vertical>
-    <button class="simpleBtn sidebarClose">
+    <button class="simpleBtn sidebarClose" v-on:click="$emit('close')">
       <sui-icon name="angle double left" size="big" />
     </button>
     <sui-menu-Item>
