@@ -2,7 +2,9 @@
 
 ## Getting Started
 
-Run these commands:
+First, copy `.env.local.sample` to `.env.local`, and set your [Mapbox access token](https://www.mapbox.com/help/how-access-tokens-work/#creating-and-managing-access-tokens) in the `VUE_APP_MAPBOX_TOKEN` variable.
+
+Then, start the local dev server:
 ```
 npm install
 npm run serve
