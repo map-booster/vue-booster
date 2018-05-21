@@ -1,6 +1,6 @@
-  <template>
+<template>
   <sui-sidebar-pushable>
-    <!-- <side-menu v-bind:visible="sidebarVisible" /> -->
+    <side-menu v-bind:visible="sidebarVisible" />
     <sui-button v-on:click="toggleSidebar" class="sidebarToggle simpleBtn">
       <sui-icon name="sidebar" size="big" />
     </sui-button>
@@ -12,17 +12,18 @@
 
 <script>
 import MapView from './components/MapView.vue';
-// import SideMenu from './components/SideMenu.vue';
+import SideMenu from './components/SideMenu.vue';
 
 export default {
   name: 'app',
   data: function() {
     return {
-      sidebarVisible: true
+      sidebarVisible: false
     };
   },
   components: {
-    MapView
+    MapView,
+    SideMenu
   },
   methods: {
     toggleSidebar() {
@@ -39,7 +40,8 @@ export default {
   z-index: 100;
 }
 
-.ui.button.simpleBtn {
+.ui.button.simpleBtn,
+.simpleBtn {
   padding: 10px;
   background: transparent;
   border: none;

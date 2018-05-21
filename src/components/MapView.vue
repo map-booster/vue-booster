@@ -10,7 +10,7 @@ mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_TOKEN;
 const dataUrl = process.env.VUE_APP_DATA_URL;
 
 export default {
-  name: 'Map',
+  name: 'map-view',
   data: function() {
     return {
       lng: 5,
