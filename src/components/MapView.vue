@@ -39,7 +39,7 @@ export default {
             'base': 1.75,
             'stops': [[12, 2], [22, 180]]
           },
-          'circle-color': '#edae49'
+          'circle-color': '#fa824c'
         }
       });
       map.addLayer({
@@ -54,7 +54,7 @@ export default {
             'base': 1.75,
             'stops': [[12, 4], [22, 360]]
           },
-          'circle-color': '#00798c',
+          'circle-color': '#3c91e6',
           'circle-opacity': 0.6
         }
       });
