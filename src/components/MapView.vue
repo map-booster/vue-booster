@@ -28,7 +28,7 @@ export default {
     });
     map.on('load', () => {
       map.addLayer({
-        id: 'locations',
+        id: 'education',
         type: 'circle',
         source: {
           type: 'geojson',
@@ -39,7 +39,23 @@ export default {
             'base': 1.75,
             'stops': [[12, 2], [22, 180]]
           },
-          'circle-color': '#10627c'
+          'circle-color': '#edae49'
+        }
+      });
+      map.addLayer({
+        id: 'places',
+        type: 'circle',
+        source: {
+          type: 'geojson',
+          data: constants.URL_POPULATED_PLACES
+        },
+        paint: {
+          'circle-radius': {
+            'base': 1.75,
+            'stops': [[12, 4], [22, 360]]
+          },
+          'circle-color': '#00798c',
+          'circle-opacity': 0.6
         }
       });
     });    
