@@ -1,6 +1,13 @@
 <template>
   <sui-sidebar-pushable>
-    <side-menu v-bind:visible="sidebarVisible" v-bind:sources="mapData.sources" v-bind:tone="mapData.tone" v-on:close="toggleSidebar" />
+    <side-menu 
+      v-bind:visible="sidebarVisible"
+      v-bind:tone="selections.tone"
+      v-bind:sources="selections.sources"
+      v-on:close="handleClose"
+      v-on:sourceChanged="handleSourceChange"
+      v-on:toneChanged="handleToneChange"
+    />
     <sui-button v-on:click="toggleSidebar" class="sidebarToggle simpleBtn">
       <sui-icon name="sidebar" size="big" />
     </sui-button>
@@ -19,7 +26,7 @@ export default {
   data: function() {
     return {
       sidebarVisible: true,
-      mapData: {
+      selections: {
         sources: {
           education: true,
           places:true
@@ -35,6 +42,17 @@ export default {
   methods: {
     toggleSidebar() {
       this.sidebarVisible = !this.sidebarVisible;
+    },
+    handleClose() {
+      this.sidebarVisible = false;
+    },
+    handleToneChange(tone) {
+      if (tone.selected) {
+        this.selections.tone = tone.name;
+      }
+    },
+    handleSourceChange(source) {
+      this.selections.sources[source.name] = source.selected;
     }
   }
 };
