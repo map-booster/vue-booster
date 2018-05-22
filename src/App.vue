@@ -1,6 +1,6 @@
 <template>
   <sui-sidebar-pushable>
-    <side-menu v-bind:visible="sidebarVisible" v-on:close="toggleSidebar" />
+    <side-menu v-bind:visible="sidebarVisible" v-bind:sources="mapData.sources" v-bind:tone="mapData.tone" v-on:close="toggleSidebar" />
     <sui-button v-on:click="toggleSidebar" class="sidebarToggle simpleBtn">
       <sui-icon name="sidebar" size="big" />
     </sui-button>
@@ -18,7 +18,14 @@ export default {
   name: 'app',
   data: function() {
     return {
-      sidebarVisible: true
+      sidebarVisible: true,
+      mapData: {
+        sources: {
+          education: true,
+          places:true
+        },
+        tone: 'all' // one of: all, positive, negative, neutral
+      }
     };
   },
   components: {

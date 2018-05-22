@@ -8,10 +8,10 @@
         <sui-menu-header>Data Sources</sui-menu-header>
         <sui-menu-menu>
           <sui-menu-item>
-            <sui-checkbox label="Populated places" v-model="sources" value="places" />
+            <sui-checkbox label="Populated places" v-bind:input-value="sources.places === true" />
           </sui-menu-item>
           <sui-menu-item>
-            <sui-checkbox label="Education news" v-model="sources" value="education" />
+            <sui-checkbox label="Education news" v-bind:input-value="sources.education === true" />
           </sui-menu-item>
         </sui-menu-menu>
       </sui-menu-item>
@@ -19,16 +19,16 @@
         <sui-menu-header>Tone of news</sui-menu-header>
         <sui-menu-menu>
           <sui-menu-item>
-            <sui-checkbox radio label="All" value="all" v-model="tone" />
+            <sui-checkbox radio label="All" v-bind:input-value="tone === 'all'" />
           </sui-menu-item>
           <sui-menu-item>
-            <sui-checkbox radio label="Positive" value="positive" v-model="tone" />
+            <sui-checkbox radio label="Positive" v-bind:input-value="tone === 'positive'" />
           </sui-menu-item>
           <sui-menu-item>
-            <sui-checkbox radio label="Neutral" value="neutral" v-model="tone" />
+            <sui-checkbox radio label="Neutral" v-bind:input-value="tone === 'neutral' "/>
           </sui-menu-item>
           <sui-menu-item>
-            <sui-checkbox radio label="Negative" value="negative" v-model="tone" />
+            <sui-checkbox radio label="Negative" v-bind:input-value="tone === 'negative'" />
           </sui-menu-item>
         </sui-menu-menu>
       </sui-menu-item>
@@ -39,13 +39,7 @@
 <script>
 export default {
   name: 'side-menu',
-  props: ['visible'],
-  data: function() {
-    return {
-      tone: 'all',
-      sources: ['education', 'places']
-    };
-  }
+  props: ['visible', 'tone', 'sources']
 };
 </script>
 
