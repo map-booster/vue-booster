@@ -18,7 +18,7 @@ export default {
   name: 'app',
   data: function() {
     return {
-      sidebarVisible: false
+      sidebarVisible: true
     };
   },
   components: {
