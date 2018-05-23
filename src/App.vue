@@ -2,8 +2,8 @@
   <sui-sidebar-pushable>
     <side-menu 
       v-bind:visible="sidebarVisible"
-      v-bind:tone="selections.tone"
-      v-bind:sources="selections.sources"
+      v-bind:selectedTone="selections.tone"
+      v-bind:selectedSources="selections.sources"
       v-on:close="handleClose"
       v-on:sourceChanged="handleSourceChange"
       v-on:toneChanged="handleToneChange"
