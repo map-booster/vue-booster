@@ -49,7 +49,7 @@ objects:
           imagePullPolicy: Always
           name: "${NAME}"
           ports:
-          - containerPort: 443
+          - containerPort: 8080
             name: https
             protocol: TCP
           resources: {}
@@ -79,9 +79,9 @@ objects:
   spec:
     ports:
     - name: https
-      port: 443
+      port: 8080
       protocol: TCP
-      targetPort: 443
+      targetPort: 8080
     selector:
       name: "${NAME}"
     sessionAffinity: None
