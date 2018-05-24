@@ -49,7 +49,7 @@ objects:
           imagePullPolicy: Always
           name: "${NAME}"
           ports:
-          - containerPort: 9000
+          - containerPort: 443
             name: http
             protocol: TCP
           resources: {}
@@ -78,10 +78,10 @@ objects:
     name: "${NAME}"
   spec:
     ports:
-    - name: 9000-tcp
-      port: 9000
-      protocol: TCP
-      targetPort: 9000
+    - name: https
+      port: 443
+      protocol: HTTPS
+      targetPort: 443
     selector:
       name: "${NAME}"
     sessionAffinity: None
@@ -95,7 +95,7 @@ objects:
     name: "${NAME}"
   spec:
     port:
-      targetPort: 9000-tcp
+      targetPort: https
     to:
       kind: Service
       name: "${NAME}"
