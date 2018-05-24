@@ -23,7 +23,7 @@ node (''){
     env.APP_NAME = 'demo-ui'
 
     // the name of the image stream that you want to when building your application source code
-    env.JENKINS_SLAVE_NAME = 'jenkins-slave-npm'
+    env.JENKINS_SLAVE_NAME = 'nodejs'
 
     // these are defaults that will help run openshift automation
     env.OCP_API_SERVER = "${env.OPENSHIFT_API_URL}"
