@@ -5,12 +5,12 @@
 
 <script>
 import mapboxgl from 'mapbox-gl';
+import constants from '../util/constants';
 
 mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_TOKEN;
-const dataUrl = process.env.VUE_APP_DATA_URL;
 
 export default {
-  name: 'Map',
+  name: 'map-view',
   data: function() {
     return {
       lng: 5,
@@ -28,18 +28,34 @@ export default {
     });
     map.on('load', () => {
       map.addLayer({
-        id: 'locations',
+        id: 'education',
         type: 'circle',
         source: {
           type: 'geojson',
-          data: dataUrl
+          data: constants.URL_EDUCATION
         },
         paint: {
           'circle-radius': {
             'base': 1.75,
             'stops': [[12, 2], [22, 180]]
           },
-          'circle-color': '#10627c'
+          'circle-color': '#fa824c'
+        }
+      });
+      map.addLayer({
+        id: 'places',
+        type: 'circle',
+        source: {
+          type: 'geojson',
+          data: constants.URL_POPULATED_PLACES
+        },
+        paint: {
+          'circle-radius': {
+            'base': 1.75,
+            'stops': [[12, 4], [22, 360]]
+          },
+          'circle-color': '#3c91e6',
+          'circle-opacity': 0.6
         }
       });
     });    

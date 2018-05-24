@@ -1,79 +1,75 @@
 #!/usr/bin/groovy
+pipeline {
+    agent { label 'jenkins-slave-npm' }
 
-/**
-    this section of the pipeline executes on the master, which has a lot of useful variables that we can leverage to configure our pipeline
-**/
-node (''){
-    // these should align to the projects in the Application Inventory
-    env.DEV_PROJECT = 'demo-ui-dev'
-    env.TEST_PROJECT = 'demo-ui-test'
-    env.UAT_PROJECT = 'demo-ui-uat'
+    environment {
+        CI_CD_PROJECT = "coo-ci-cd"
+        DEV_PROJECT = "coo-dev"
+        TEST_PROJECT = "coo-test"
+        SOURCE_CONTEXT_DIR = ""
+        BUILD_OUTPUT_CONTEXT_DIR = "dist/"
+        APP_NAME = "vue-booster"
+        OCP_API_SERVER = "${OPENSHIFT_API_URL}"
+        OCP_TOKEN = readFile('/var/run/secrets/kubernetes.io/serviceaccount/token').trim()
 
-    // this value should be set to the root directory of your source code within the git repository.
-    // if the root of the source is the root of the repo, leave this value as ""
-    env.SOURCE_CONTEXT_DIR = ""
-
-    // this value is relative to env.SOURCE_CONTEXT_DIR
-    // it should be set to the location where you build outputs the artifacts you want to publish to your container build
-    env.BUILD_OUTPUT_CONTEXT_DIR = "dist/"
-
-    // the complete build command
-    env.BUILD_COMMAND = "/usr/bin/npm install && ./node_modules/@vue/cli-service/bin/vue-cli-service.js build"
-
-    env.APP_NAME = 'demo-ui'
-
-    // the name of the image stream that you want to when building your application source code
-    env.JENKINS_SLAVE_NAME = 'nodejs'
-
-    // these are defaults that will help run openshift automation
-    env.OCP_API_SERVER = "${env.OPENSHIFT_API_URL}"
-    env.OCP_TOKEN = readFile('/var/run/secrets/kubernetes.io/serviceaccount/token').trim()
-}
-
-
-/**
-    this section of the pipeline executes on a custom mvn build slave.
-    you should not need to change anything below unless you need new stages or new integrations (e.g. Cucumber Reports or Sonar)
-**/
-node("${env.JENKINS_SLAVE_NAME}") {
-
-  stage('SCM Checkout') {
-    checkout scm
-  }
-
-  dir ("${env.SOURCE_CONTEXT_DIR}") {
-    stage('Build App') {
-      
-      sh "${env.BUILD_COMMAND}"
     }
 
-    // assumes uber jar is created
-    stage('Build Image') {
-      sh "oc start-build ${env.APP_NAME} --from-dir=${env.BUILD_OUTPUT_CONTEXT_DIR} --follow"
+    stages {
+        stage('Build'){
+            steps{
+              slackSend "${APP_NAME} Job Started - ${JOB_NAME} ${BUILD_NUMBER} (<${BUILD_URL}|Open>)"
+              sh "npm install && ./node_modules/@vue/cli-service/bin/vue-cli-service.js build"
+            }
+        }
+
+        stage('Bake'){
+            steps{
+                script{
+                    def helper = load 'shared-library.groovy'
+                    helper.patchBuildConfigOutputLabels(env)
+
+                    openshift.withCluster () {
+                        def buildSelector = openshift.startBuild( "${APP_NAME} --from-dir=${BUILD_OUTPUT_CONTEXT_DIR}" )
+                        buildSelector.logs('-f')
+                    }
+                }
+            }
+        }
+
+        stage('Deploy: Dev'){
+            steps {
+                script{
+                    def helper = load 'shared-library.groovy'
+                    timeout(5) { // in minutes
+                        openshift.loglevel(3)
+                        helper.promoteImageWithinCluster( "${APP_NAME}", "${CI_CD_PROJECT}", "${DEV_PROJECT}" )
+                        helper.verifyDeployment("${APP_NAME}", "${DEV_PROJECT}")
+                    }
+                }
+            }
+        }
+
+        stage('Deploy: Test'){
+            options {
+                timeout(time: 1, unit: 'HOURS')
+            }
+            steps {
+                script {
+                    slackSend "${env.APP_NAME} Input requested - ${JOB_NAME} ${BUILD_NUMBER} (<${BUILD_URL}|Open>)"
+                    input message: 'Deploy to Test?'
+                }
+                script{
+                    def helper = load 'shared-library.groovy'
+                    timeout(10) { // in minutes
+                        helper.promoteImageWithinCluster( "${APP_NAME}", "${DEV_PROJECT}", "${TEST_PROJECT}" )
+                        // the new client is having random failures
+                        helper.verifyDeployment("${APP_NAME}", "${TEST_PROJECT}")
+                    }
+                }
+
+                slackSend color: "good", message: ":success: ${APP_NAME} Build Completed - ${JOB_NAME} ${BUILD_NUMBER} (<${BUILD_URL}|Open>)"
+
+            }
+        }
     }
-  }
-
-  // no user changes should be needed below this point
-  stage ('Deploy to Dev') {
-    openshiftTag (apiURL: "${env.OCP_API_SERVER}", authToken: "${env.OCP_TOKEN}", destStream: "${env.APP_NAME}", destTag: 'latest', destinationAuthToken: "${env.OCP_TOKEN}", destinationNamespace: "${env.DEV_PROJECT}", namespace: "${env.OPENSHIFT_BUILD_NAMESPACE}", srcStream: "${env.APP_NAME}", srcTag: 'latest')
-
-    openshiftVerifyDeployment (apiURL: "${env.OCP_API_SERVER}", authToken: "${env.OCP_TOKEN}", depCfg: "${env.APP_NAME}", namespace: "${env.DEV_PROJECT}", verifyReplicaCount: true)
-  }
-
-  stage ('Deploy to Test') {
-    input "Promote Application to Test?"
-
-    openshiftTag (apiURL: "${env.OCP_API_SERVER}", authToken: "${env.OCP_TOKEN}", destStream: "${env.APP_NAME}", destTag: 'latest', destinationAuthToken: "${env.OCP_TOKEN}", destinationNamespace: "${env.TEST_PROJECT}", namespace: "${env.DEV_PROJECT}", srcStream: "${env.APP_NAME}", srcTag: 'latest')
-
-    openshiftVerifyDeployment (apiURL: "${env.OCP_API_SERVER}", authToken: "${env.OCP_TOKEN}", depCfg: "${env.APP_NAME}", namespace: "${env.TEST_PROJECT}", verifyReplicaCount: true)
-  }
-
-  stage ('Deploy to UAT') {
-    input "Promote Application to UAT?"
-
-    openshiftTag (apiURL: "${env.OCP_API_SERVER}", authToken: "${env.OCP_TOKEN}", destStream: "${env.APP_NAME}", destTag: 'latest', destinationAuthToken: "${env.OCP_TOKEN}", destinationNamespace: "${env.UAT_PROJECT}", namespace: "${env.TEST_PROJECT}", srcStream: "${env.APP_NAME}", srcTag: 'latest')
-
-    openshiftVerifyDeployment (apiURL: "${env.OCP_API_SERVER}", authToken: "${env.OCP_TOKEN}", depCfg: "${env.APP_NAME}", namespace: "${env.UAT_PROJECT}", verifyReplicaCount: true)
-  }
-
 }
