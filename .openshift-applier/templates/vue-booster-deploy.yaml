@@ -50,7 +50,7 @@ objects:
           name: "${NAME}"
           ports:
           - containerPort: 443
-            name: http
+            name: https
             protocol: TCP
           resources: {}
           terminationMessagePath: "/dev/termination-log"
@@ -80,7 +80,7 @@ objects:
     ports:
     - name: https
       port: 443
-      protocol: HTTPS
+      protocol: TCP
       targetPort: 443
     selector:
       name: "${NAME}"
