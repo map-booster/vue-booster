@@ -49,8 +49,8 @@ objects:
           imagePullPolicy: Always
           name: "${NAME}"
           ports:
-          - containerPort: 9000
-            name: http
+          - containerPort: 8080
+            name: https
             protocol: TCP
           resources: {}
           terminationMessagePath: "/dev/termination-log"
@@ -78,10 +78,10 @@ objects:
     name: "${NAME}"
   spec:
     ports:
-    - name: 9000-tcp
-      port: 9000
+    - name: https
+      port: 8080
       protocol: TCP
-      targetPort: 9000
+      targetPort: 8080
     selector:
       name: "${NAME}"
     sessionAffinity: None
@@ -95,7 +95,7 @@ objects:
     name: "${NAME}"
   spec:
     port:
-      targetPort: 9000-tcp
+      targetPort: https
     to:
       kind: Service
       name: "${NAME}"
