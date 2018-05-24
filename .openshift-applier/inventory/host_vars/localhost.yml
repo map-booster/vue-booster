@@ -3,25 +3,25 @@ connection: local
 openshift_cluster_content:
   - object: app-builds
     content:
-      - name: assistant-build
+      - name: app-build
         template: "https://raw.githubusercontent.com/rht-labs/labs-ci-cd/v3.9.0/openshift-templates/s2i-app-build/template-with-secrets.yaml"
         params: "{{ playbook_dir }}/params/build"
-        namespace: "{{ ci_cd_namespace }}"
+        namespace: "{{ ci_cd.namespace }}"
         tags:
           - build
   - object: dev-stage
     content:
-      - name: assistant-deploy
+      - name: app-deploy
         template: "{{ playbook_dir }}/templates/vue-booster-deploy.yaml"
         params: "{{ playbook_dir }}/params/dev"
-        namespace: "{{ dev_namespace }}"
+        namespace: "{{ dev.namespace }}"
         tags:
           - dev
   - object: test-stage
     content:
-      - name: assistant-deploy
+      - name: app-deploy
         template: "{{ playbook_dir }}/templates/vue-booster-deploy.yaml"
         params: "{{ playbook_dir }}/params/test"
-        namespace: "{{ test_namespace }}"
+        namespace: "{{ test.namespace }}"
         tags:
           - test
