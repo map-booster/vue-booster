@@ -1,20 +1,20 @@
 #!/usr/bin/groovy
 pipeline {
     agent { label 'jenkins-slave-npm' }
-    
+
     environment {
         CI_CD_PROJECT = "coo-ci-cd"
         DEV_PROJECT = "coo-dev"
         TEST_PROJECT = "coo-test"
         SOURCE_CONTEXT_DIR = ""
         BUILD_OUTPUT_CONTEXT_DIR = "dist/"
-        BUILD_COMMAND = "/usr/bin/npm install && ./node_modules/@vue/cli-service/bin/vue-cli-service.js build"
+        BUILD_COMMAND = "npm install && ./node_modules/@vue/cli-service/bin/vue-cli-service.js build"
         APP_NAME = "vue-booster"
         OCP_API_SERVER = "${OPENSHIFT_API_URL}"
         OCP_TOKEN = readFile('/var/run/secrets/kubernetes.io/serviceaccount/token').trim()
-    
+
     }
-  
+
     stages {
         stage('Build'){
             steps{
