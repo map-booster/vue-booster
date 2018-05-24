@@ -1,6 +1,0 @@
-{
-  "node-login-service": "http://localhost:3000",
-  "node-member-policy-service": "http://localhost:3000",
-  "node-claims-service": "http://localhost:3000",
-  "node-member-identity-service": "http://localhost:3000"
-}
