@@ -8,7 +8,6 @@ pipeline {
         TEST_PROJECT = "coo-test"
         SOURCE_CONTEXT_DIR = ""
         BUILD_OUTPUT_CONTEXT_DIR = "dist/"
-        BUILD_COMMAND = ""
         APP_NAME = "vue-booster"
         OCP_API_SERVER = "${OPENSHIFT_API_URL}"
         OCP_TOKEN = readFile('/var/run/secrets/kubernetes.io/serviceaccount/token').trim()
