@@ -52,9 +52,6 @@ objects:
           - containerPort: 9000
             name: http
             protocol: TCP
-          env:
-            - name: NODE_SERVICES
-              value: "node-login-service,node-member-policy-service,node-claims-service,node-member-identity-service"
           resources: {}
           terminationMessagePath: "/dev/termination-log"
         dnsPolicy: ClusterFirst

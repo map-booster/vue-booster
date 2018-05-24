@@ -3,8 +3,8 @@
   hosts: local
   gather_facts: no
   vars:
-    ci_cd_namespace: vue-booster-ci-cd
-    dev_namespace: vue-booster-dev
-    test_namespace: vue-booster-test
+    ci_cd_namespace: coo-ci-cd
+    dev_namespace: coo-dev
+    test_namespace: coo-test
   roles:
     - openshift-applier/roles/openshift-applier
