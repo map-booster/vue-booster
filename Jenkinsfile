@@ -8,7 +8,7 @@ pipeline {
         TEST_PROJECT = "coo-test"
         SOURCE_CONTEXT_DIR = ""
         BUILD_OUTPUT_CONTEXT_DIR = "dist/"
-        BUILD_COMMAND = "npm install && ./node_modules/@vue/cli-service/bin/vue-cli-service.js build"
+        BUILD_COMMAND = ""
         APP_NAME = "vue-booster"
         OCP_API_SERVER = "${OPENSHIFT_API_URL}"
         OCP_TOKEN = readFile('/var/run/secrets/kubernetes.io/serviceaccount/token').trim()
@@ -19,7 +19,7 @@ pipeline {
         stage('Build'){
             steps{
               slackSend "${APP_NAME} Job Started - ${JOB_NAME} ${BUILD_NUMBER} (<${BUILD_URL}|Open>)"
-              sh ${BUILD_COMMAND}
+              sh "npm install && ./node_modules/@vue/cli-service/bin/vue-cli-service.js build"
             }
         }
 
