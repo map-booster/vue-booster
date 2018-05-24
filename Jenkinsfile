@@ -19,7 +19,7 @@ pipeline {
         stage('Build'){
             steps{
               slackSend "${APP_NAME} Job Started - ${JOB_NAME} ${BUILD_NUMBER} (<${BUILD_URL}|Open>)"
-              sh '${BUILD_COMMAND}'
+              sh ${BUILD_COMMAND}
             }
         }
 
