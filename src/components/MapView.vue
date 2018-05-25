@@ -5,7 +5,7 @@
 
 <script>
 import mapboxgl from 'mapbox-gl';
-import constants from '../util/constants';
+import api from '../util/api';
 
 mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_TOKEN;
 
@@ -32,7 +32,7 @@ export default {
         type: 'circle',
         source: {
           type: 'geojson',
-          data: constants.URL_EDUCATION
+          data: api.URL_EDUCATION
         },
         paint: {
           'circle-radius': {
@@ -47,7 +47,7 @@ export default {
         type: 'circle',
         source: {
           type: 'geojson',
-          data: constants.URL_POPULATED_PLACES
+          data: api.URL_POPULATED_PLACES
         },
         paint: {
           'circle-radius': {
