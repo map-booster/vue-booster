@@ -37,9 +37,11 @@ pipeline {
         }
 
         stage('Deploy: Dev'){
+            agent { label 'jenkins-slave-ansible'}
             steps {
                 script{
                     def helper = load 'shared-library.groovy'
+                    helper.applyAnsibleInventory( 'dev' )
                     timeout(5) { // in minutes
                         openshift.loglevel(3)
                         helper.promoteImageWithinCluster( "${APP_NAME}", "${CI_CD_PROJECT}", "${DEV_PROJECT}" )
@@ -50,6 +52,7 @@ pipeline {
         }
 
         stage('Deploy: Test'){
+            agent { label 'jenkins-slave-ansible'}
             options {
                 timeout(time: 1, unit: 'HOURS')
             }
@@ -60,6 +63,7 @@ pipeline {
                 }
                 script{
                     def helper = load 'shared-library.groovy'
+                    helper.applyAnsibleInventory( 'test' )
                     timeout(10) { // in minutes
                         helper.promoteImageWithinCluster( "${APP_NAME}", "${DEV_PROJECT}", "${TEST_PROJECT}" )
                         // the new client is having random failures
