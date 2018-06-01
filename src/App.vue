@@ -12,7 +12,7 @@
       <sui-icon name="sidebar" size="big" />
     </sui-button>
     <sui-sidebar-pusher className="contentArea">
-      <map-view />
+      <map-view v-bind:selectedSources="selections.sources" />
     </sui-sidebar-pusher>
   </sui-sidebar-pushable>  
 </template>
@@ -29,7 +29,7 @@ export default {
       selections: {
         sources: {
           education: true,
-          places:true
+          places: true
         },
         tone: 'all' // one of: all, positive, negative, neutral
       }

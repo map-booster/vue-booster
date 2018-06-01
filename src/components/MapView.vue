@@ -15,24 +15,47 @@ export default {
     return {
       lng: 5,
       lat: 34,
-      zoom: 1.5
+      zoom: 1.5,
+      map: {}
     };
+  },
+  props: ['selectedSources'],
+  computed: {
+    // Convert boolean to Mapbox-style paint property.
+    // These properties are used by the watchers and the map init.
+    educationVisible: function() {
+      return (this.selectedSources.education) ? 'visible' : 'none';
+    },
+    placesVisible: function() {
+      return (this.selectedSources.places) ? 'visible' : 'none';
+    }
+  },
+  watch: {
+    educationVisible: function (newVal) {
+      this.map.setLayoutProperty('education', 'visibility', newVal);
+    },
+    placesVisible: function (newVal) {
+      this.map.setLayoutProperty('places', 'visibility', newVal);
+    }
   },
   mounted: function() {
     const vm = this;
-    const map = new mapboxgl.Map({
+    vm.map = new mapboxgl.Map({
       container: vm.$refs.map,
       style: 'mapbox://styles/mapbox/streets-v9',
       center: [vm.lng, vm.lat],
       zoom: this.zoom
     });
-    map.on('load', () => {
-      map.addLayer({
+    vm.map.on('load', () => {
+      vm.map.addLayer({
         id: 'education',
         type: 'circle',
         source: {
           type: 'geojson',
           data: api.URL_EDUCATION
+        },
+        layout: {
+          visibility: vm.educationVisible
         },
         paint: {
           'circle-radius': {
@@ -42,12 +65,15 @@ export default {
           'circle-color': '#fa824c'
         }
       });
-      map.addLayer({
+      vm.map.addLayer({
         id: 'places',
         type: 'circle',
         source: {
           type: 'geojson',
           data: api.URL_POPULATED_PLACES
+        },
+        layout: {
+          visibility: vm.placesVisible
         },
         paint: {
           'circle-radius': {
